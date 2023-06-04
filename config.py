@@ -8,30 +8,30 @@ postgres_conn = {
 }
 
 mysql_conn1 = {
-    'host': '10.1.1.205',
+    'host': '127.0.0.1',
     'port': '3306',
-    'database': 'nip_report51',
-    'user': 'nipreport',
-    'password': 'NipReport@.21'
+    'database': 'databasename',
+    'user': 'Username',
+    'password': 'Password'
 }
 mysql_conn2 = {
-    'host': '10.1.1.203',
+    'host': '127.0.0.1',
     'port': '3306',
-    'database': 'nip_report50',
-    'user': 'nipreport',
-    'password': 'NipReport@.21'
+    'database': 'databasename',
+    'user': 'Username',
+    'password': 'Password'
 }
 mysql_conn3 = {
-    'host': '10.1.1.203',
+    'host': '127.0.0.1',
     'port': '3307',
-    'database': 'nip_report47',
-    'user': 'nipreport',
-    'password': 'NipReport@.21'
+    'database': 'databasename',
+    'user': 'Username',
+    'password': 'Password'
 }
 mysql_conn4 = {
-    'host': '10.4.4.42',
+    'host': '127.0.0.1',
     'port': '3306',
-    'database': 'nip_settlement',
-    'user': 'ebillspay',
-    'password': 'Admin123@'
+    'database': 'databasename',
+    'user': 'Username',
+    'password': 'Password'
 }

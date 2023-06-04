@@ -48,9 +48,9 @@ with open(path1, 'r') as file_object:
     session_ids=lines.split()
     #print(f"' + {banks} + '", sep="','" )
     print(session_ids)
-    fieldnames=['BVN','first_name','Middle_name','Surname','DOB','Account','Banks']
-    p=str([str(x) for x in session_ids]).split()#.strip(']')
+    fieldnames=['BVN','first_name','Middle_name','Surname','DOB','Account','Bank']
+    p=str([(str(x)) for x in session_ids]).strip("[]")
     print(p)
-    with open('comma.csv','w', newline='') as fileo:
-        my_writer = csv.writer(fileo, delimiter=' ')
+    with open('comma.csv','w', newline='\n') as fileo:
+        my_writer = csv.writer(fileo)
         my_writer.writerow(p)  

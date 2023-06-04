@@ -5,7 +5,7 @@ import datetime
 import time
 import mysql.connector
 import threading
-from config import mysql_conn, mysql_connv
+from config import mysql_conn1,mysql_conn2,mysql_conn3,mysql_conn4
 #from mysql.consnector import Error
 
 import smtplib,ssl
@@ -41,22 +41,25 @@ final_date1= new_date1.strftime('%Y-%m-%d')
 print(final_date1)
 
 
-path1='C:/python_work/Transactions_search/session_ids.csv'
+path1='/Transactions_search/session_ids.csv'
 with open(path1, 'r') as file_object:
     lines=file_object.read()
         #print(lines)
     session_ids=lines.split()
     #print(f"' + {banks} + '", sep="','" )
     print(session_ids)
-    fieldnames=['BVN','first_name','Middle_name','Surname','DOB','Account','Bank']
+    fieldnames=['session_id','transaction_date','response_code','amount']
+    fieldnames4=['session_id','request_time','response_code','amount']
     p=str([str(x) for x in session_ids]).strip("[]")
     print(p)
     
 
 # Define your queries
 postgres_query = "SELECT * FROM mytable"
-mysql_query2 = "SELECT distinct(terminal_id) FROM housing_data.transactions_2;"
-mysql_query = f"SELECT * FROM housing_data.icad where bank in ({p})"
+mysql_query1 = f"SELECT session_id, transaction_date, response_code, amount FROM nip_report51.`transaction` where session_id in ({p});"
+mysql_query2 = f"SELECT session_id, transaction_date, response_code, amount FROM nip_report50.`transaction` where session_id in ({p});"
+mysql_query3 = f"SELECT session_id, transaction_date, response_code, amount FROM nip_report47.`transaction` where session_id in ({p});"
+mysql_query4 = f"SELECT session_id, request_time, response_code, amount FROM nip_settlement.`tbl_fund_transfer_credits` where session_id in ({p});"
 
 # # Function to execute PostgreSQL query in a thread
 # def run_postgres_query():
@@ -68,18 +71,18 @@ mysql_query = f"SELECT * FROM housing_data.icad where bank in ({p})"
 #     postgres_cursor.close()
 #     postgres_db.close()
 # Function to execute MySQL query in a thread
-def run_mysql_query(): # type: ignore
-    mysql_db = mysql.connector.connect(**mysql_conn)
+def run_mysql_query1(): # type: ignore
+    mysql_db = mysql.connector.connect(**mysql_conn1)
     mysql_cursor = mysql_db.cursor()
-    mysql_cursor.execute(mysql_query)
+    mysql_cursor.execute(mysql_query1)
     results = mysql_cursor.fetchall()
     print("MySQL results:", results)
-    data=str(f"-----{mysql_conn['database']}-----").strip(",")
+    data=str(f"-----{mysql_conn1['database']}-----")
     
     
-    with open(f"C:/python_work/Transactions_search/result.csv", 'w', newline = '') as csvfile:
+    with open(f"/Transactions_search/Result/result_{mysql_conn1['database']}.csv", 'w', newline = '') as csvfile:
         
-        my_writer = csv.writer(csvfile, delimiter = '')
+        my_writer = csv.writer(csvfile, delimiter = ' ')
         my_writer.writerow(data)
         my_writer.writerow(fieldnames)
         
@@ -96,13 +99,13 @@ def run_mysql_query(): # type: ignore
     
 # Function to execute MySQL query in a thread
 def run_mysql_query2():
-    mysql_db = mysql.connector.connect(**mysql_connv)
+    mysql_db = mysql.connector.connect(**mysql_conn2)
     mysql_cursor = mysql_db.cursor()
     mysql_cursor.execute(mysql_query2)
     results = mysql_cursor.fetchall()
     print("MySQL results:", results)
-    data=str(f"-----{mysql_connv['database']}-----")
-    with open(f"C:/python_work/Transactions_search/result.csv", 'a', newline = '') as csvfile:
+    data=str(f"-----{mysql_conn2['database']}-----")
+    with open(f"/Transactions_search/Result/result_{mysql_conn2['database']}.csv", 'w', newline = '') as csvfile:
         
         my_writer = csv.writer(csvfile, delimiter = ',')
         my_writer.writerow(data)
@@ -120,16 +123,16 @@ def run_mysql_query2():
     mysql_db.close()
 
 # Function to execute MySQL query in a thread
-def run_mysql_query():
-    mysql_db = mysql.connector.connect(**mysql_conn)
+def run_mysql_query3():
+    mysql_db = mysql.connector.connect(**mysql_conn3)
     mysql_cursor = mysql_db.cursor()
-    mysql_cursor.execute(mysql_query)
+    mysql_cursor.execute(mysql_query3)
     results = mysql_cursor.fetchall()
     print("MySQL results:", results)
-    data=str(f"-----{mysql_conn['database']}-----")
+    data=str(f"-----{mysql_conn3['database']}-----")
     
     
-    with open(f"C:/python_work/Transactions_search/result.csv", 'a', newline = '') as csvfile:
+    with open(f"/Transactions_search/Result/result_{mysql_conn3['database']}.csv", 'w', newline = '') as csvfile:
         
         my_writer = csv.writer(csvfile, delimiter = ',')
         my_writer.writerow(data)
@@ -145,22 +148,53 @@ def run_mysql_query():
             my_writer.writerow(row)
     mysql_cursor.close()
     mysql_db.close()
-    
 
+# Function to execute MySQL query in a thread
+def run_mysql_query4():
+    mysql_db = mysql.connector.connect(**mysql_conn4)
+    mysql_cursor = mysql_db.cursor()
+    mysql_cursor.execute(mysql_query4)
+    results = mysql_cursor.fetchall()
+    print("MySQL results:", results)
+    data=str(f"-----{mysql_conn4['database']}-----")
+    
+    
+    with open(f"/Transactions_search/Result/result_{mysql_conn4['database']}.csv", 'w', newline = '') as csvfile:
+        
+        my_writer = csv.writer(csvfile, delimiter = ' ')
+        my_writer.writerow(data)
+        my_writer.writerow(fieldnames4)
+        
+            
+        
+        
+    # loop through the rows'
+        for row in results:
+            print(row)
+            #print("\n")
+            my_writer.writerow(row)
+    mysql_cursor.close()
+    mysql_db.close()
 
 # Create threads for each database
 #postgres_thread = threading.Thread(target=run_postgres_query)
-mysql_thread = threading.Thread(target=run_mysql_query)
+mysql_thread1 = threading.Thread(target=run_mysql_query1)
 mysql_thread2 = threading.Thread(target=run_mysql_query2)
+mysql_thread3 = threading.Thread(target=run_mysql_query3)
+mysql_thread4 = threading.Thread(target=run_mysql_query4)
 
 # Start the threads
 #postgres_thread.start()
+mysql_thread1.start()
 mysql_thread2.start()
-mysql_thread.start()
+mysql_thread3.start()
+mysql_thread4.start()
 
 
 # Wait for the threads to finish
 #postgres_thread.join()
-mysql_thread.join()
+mysql_thread1.join()
 mysql_thread2.join()
+mysql_thread3.join()
+mysql_thread4.join()
    

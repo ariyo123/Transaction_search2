@@ -12,12 +12,12 @@ mysql_connv = {
     'port': '3306',
     'database': 'housing_data',
     'user': 'root',
-    'password': 'Magfum12@'
+    'password': 'password'
 }
 mysql_conn = {
     'host': '127.0.0.1',
     'port': '3306',
     'database': 'housing_data',
     'user': 'root',
-    'password': 'Magfum12@'
+    'password': 'password'
 }

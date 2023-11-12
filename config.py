@@ -7,14 +7,14 @@ postgres_conn = {
     'password': 'password'
 }
 
-mysql_conn1 = {
+mysql_conn = {
     'host': '127.0.0.1',
     'port': '3306',
     'database': 'databasename',
     'user': 'Username',
     'password': 'Password'
 }
-mysql_conn2 = {
+mysql_connv = {
     'host': '127.0.0.1',
     'port': '3306',
     'database': 'databasename',
